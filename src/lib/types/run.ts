@@ -18,4 +18,19 @@ export class Run {
     this._type = type
     this._runners = runners
   }
+
+  get formatted() {
+    return `${this._game} / ${this._category} (${this._displayedType}) / ${this._runners.join(', ')}`
+  }
+
+  private get _displayedType() {
+    return {
+      SINGLE: 'Single Run',
+      RACE: 'Race',
+      COOP: 'Co-op Run',
+      COOP_RACE: 'Co-op Race',
+      RELAY: 'Relay',
+      RELAY_RACE: 'Relay Race'
+    }[this._type]
+  }
 }
