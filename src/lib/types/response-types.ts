@@ -24,7 +24,13 @@ class Opponent {
   user: User
 }
 
+class Selection {
+  categoryId: number
+  status: string
+}
+
 export {
   Submission,
-  User
+  User,
+  Selection
 }

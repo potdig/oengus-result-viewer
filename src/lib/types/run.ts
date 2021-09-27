@@ -19,6 +19,10 @@ export class Run {
     this._runners = runners
   }
 
+  get id() {
+    return this._id
+  }
+
   get formatted() {
     return `${this._game} / ${this._category} (${this._displayedType}) / ${this._runners.join(', ')}`
   }

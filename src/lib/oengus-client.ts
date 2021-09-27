@@ -1,6 +1,7 @@
 import fetch from 'node-fetch'
-import { Submission, User } from './types/response-types'
+import { Selection, Submission, User } from './types/response-types'
 import { Run } from './types/run'
+import { Result } from './types/result'
 
 export class OengusClient {
   async getRuns(eventId: string) {
@@ -21,6 +22,18 @@ export class OengusClient {
         })
       })
     })
+  }
+
+  async getResults(eventId: string, runs: Array<Run>) {
+    const url = new URL(`https://oengus.io/api/marathons/${eventId}/selections`)
+    const response = await fetch(url.href)
+    const selectionsObj = (await response.json()) as object
+    const selections = Object.values(selectionsObj) as Array<Selection>
+
+    return selections.map(selection => new Result(
+      selection.status,
+      runs.find(run => run.id === selection.categoryId)
+    ))
   }
 
   private _availableUserNamefor = (user: User) =>
