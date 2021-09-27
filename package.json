@@ -23,7 +23,11 @@
     "typescript": "^4.4.3"
   },
   "dependencies": {
+    "@types/command-line-args": "^5.2.0",
+    "@types/command-line-usage": "^5.0.2",
     "colors": "^1.4.0",
+    "command-line-args": "^5.2.0",
+    "command-line-usage": "^6.1.1",
     "node-fetch": "^2.6.5"
   }
 }
