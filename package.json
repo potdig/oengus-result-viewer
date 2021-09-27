@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "do": "ts-node src/index.ts",
+    "view": "ts-node src/index.ts",
     "test": "jest"
   },
   "keywords": [],
