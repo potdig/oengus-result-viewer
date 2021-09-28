@@ -1,0 +1,55 @@
+[
+  {
+    "id": 1,
+    "user": {
+      "id": 1,
+      "username": "Runner 1",
+      "usernameJapanese": ""
+    },
+    "games": [
+      {
+        "id": 1,
+        "name": "Game Title 1",
+        "categories": [
+          {
+            "id": 1,
+            "name": "Category%",
+            "type": "SINGLE",
+            "opponentDtos": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "user": {
+      "id": 2,
+      "username": "Runner 2",
+      "usernameJapanese": ""
+    },
+    "games": [
+      {
+        "id": 2,
+        "name": "Game Title 2",
+        "categories": [
+          {
+            "id": 2,
+            "name": "Any%",
+            "type": "RACE",
+            "opponentDtos": [
+              {
+                "id": 1,
+                "user": {
+                  "id": 3,
+                  "username": "Runner 3",
+                  "usernameJapanese": ""
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

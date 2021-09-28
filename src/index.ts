@@ -1,10 +1,23 @@
 import commandLineArgs from 'command-line-args'
 import commandLineUsage from 'command-line-usage'
+import { basename, resolve } from 'path'
 import { OengusClient } from './lib/oengus-client'
 
 async function printResultFromAPI(eventId: string) {
   const runs = await oengus.getRunsFromApi(eventId)
   const results = await oengus.getResults(eventId, runs)
+  results.forEach(result => {
+    console.log(result.formatted)
+  })
+}
+
+async function printResultFromFile(file: string) {
+  const path = resolve(__dirname, file)
+  const runs = oengus.getRunsFromFile(path)
+
+  const eventId = basename(path, path.substring(path.lastIndexOf('.')))
+  const results = await oengus.getResults(eventId, runs)
+
   results.forEach(result => {
     console.log(result.formatted)
   })
@@ -50,8 +63,9 @@ if (submissionFile && eventId) {
 const oengus = new OengusClient()
 
 if (submissionFile) {
-  // TODO
-  console.log('not implemented')
+  (async () => {
+    await printResultFromFile(submissionFile)
+  })()
 } else if (eventId) {
   (async () => {
     await printResultFromAPI(eventId!)

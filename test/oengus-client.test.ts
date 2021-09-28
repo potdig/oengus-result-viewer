@@ -6,6 +6,7 @@ import { Result } from '../src/lib/types/result'
 import { Run } from '../src/lib/types/run'
 import submissionsResponses from './data/submissions-response'
 import selectionsResponses from './data/selections-response'
+import { resolve } from 'path'
 
 describe('OengusClient', () => {
   describe('getRunsFromApi', () => {
@@ -53,6 +54,29 @@ describe('OengusClient', () => {
       })
 
       expect(mockFetch).toHaveBeenCalledWith('https://oengus.io/api/marathons/eventid2/submissions')
+    })
+  })
+  describe('getRunsFromFile', () => {
+    it('convert from JSON file', () => {
+      const eventId = 'eventid'
+
+      const client = new OengusClient()
+      const runs: Array<Run> = client.getRunsFromFile(resolve(__dirname, 'data/submissions-response.json'))
+
+      expect(runs[0]).toEqual({
+        _id: 1,
+        _game: 'Game Title 1',
+        _category: 'Category%',
+        _type: 'SINGLE',
+        _runners: ['Runner 1']
+      })
+      expect(runs[1]).toEqual({
+        _id: 2,
+        _game: 'Game Title 2',
+        _category: 'Any%',
+        _type: 'RACE',
+        _runners: ['Runner 2', 'Runner 3']
+      })
     })
   })
   describe('getResults', () => {
