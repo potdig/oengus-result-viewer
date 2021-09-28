@@ -5,6 +5,7 @@ Views selection results of marathon on Oengus.
 | ----------- | ----------- |
 | `--submission-file=file`, `-f` | The JSON file fetched from submission API of Oengus. **The file name is needed to be format of `[event-id].json`.** If specified with `--event-id`, this option is prefered. |
 | `--event-id=string`, `-e` | The name of the event you want to display results. This option fetches submission data from Oengus API. |
+| `--submission-only` | Views only submissions. (result is not viewed) |
 ## Usage Example
 ```sh
 # load submissions from JSON file (recommended)

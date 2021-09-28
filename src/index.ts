@@ -3,33 +3,49 @@ import commandLineUsage from 'command-line-usage'
 import { basename, resolve } from 'path'
 import { OengusClient } from './lib/oengus-client'
 
-async function printResultFromAPI(eventId: string) {
+async function printFromAPI(eventId: string, submissionOnly: boolean = false) {
   const runs = await oengus.getRunsFromApi(eventId)
+  if (submissionOnly) {
+    runs.forEach((run) => {
+      console.log(run.formatted)
+    })
+    return
+  }
+
   const results = await oengus.getResults(eventId, runs)
-  results.forEach(result => {
+  results.forEach((result) => {
     console.log(result.formatted)
   })
 }
 
-async function printResultFromFile(file: string) {
+async function printFromFile(file: string, submissionOnly: boolean = false) {
   const path = resolve(__dirname, file)
   const runs = oengus.getRunsFromFile(path)
+
+  if (submissionOnly) {
+    runs.forEach((run) => {
+      console.log(run.formatted)
+    })
+    return
+  }
 
   const eventId = basename(path, path.substring(path.lastIndexOf('.')))
   const results = await oengus.getResults(eventId, runs)
 
-  results.forEach(result => {
+  results.forEach((result) => {
     console.log(result.formatted)
   })
 }
 
 const options = commandLineArgs([
   { name: 'submission-file', alias: 'f', type: String },
-  { name: 'event-id', alias: 'e', type: String }
+  { name: 'event-id', alias: 'e', type: String },
+  { name: 'submission-only', type: Boolean }
 ])
 
-const submissionFile = options['submission-file']
-const eventId = options['event-id']
+const submissionFile: string = options['submission-file']
+const eventId: string = options['event-id']
+const submissionOnly: boolean = options['submission-only']
 
 const usage = commandLineUsage([
   {
@@ -44,12 +60,18 @@ const usage = commandLineUsage([
         name: 'submission-file',
         alias: 'f',
         typeLabel: '{underline file}',
-        description: 'The JSON file fetched from submission API of Oengus. If specified with {bold --event-id}, {bold --submission-file} is prefered.'
+        description:
+          'The JSON file fetched from submission API of Oengus. If specified with {bold --event-id}, {bold --submission-file} is prefered.'
       },
       {
         name: 'event-id',
         alias: 'e',
-        description: 'The name of the event you want to display results. This option fetches submission data from Oengus API.'
+        description:
+          'The name of the event you want to display results. This option fetches submission data from Oengus API.'
+      },
+      {
+        name: 'submission-only',
+        description: 'Views only submissions. (result is not viewed)'
       }
     ]
   }
@@ -63,11 +85,11 @@ if (submissionFile && eventId) {
 const oengus = new OengusClient()
 
 if (submissionFile) {
-  (async () => {
-    await printResultFromFile(submissionFile)
+  ;(async () => {
+    await printFromFile(submissionFile, submissionOnly)
   })()
 } else if (eventId) {
-  (async () => {
-    await printResultFromAPI(eventId!)
+  ;(async () => {
+    await printFromAPI(eventId!, submissionOnly)
   })()
 }
