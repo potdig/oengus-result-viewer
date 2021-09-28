@@ -5,21 +5,30 @@ import { Result } from './types/result'
 
 export class OengusClient {
   async getRunsFromApi(eventId: string) {
+    console.log('Fetching submissions from API...')
     const response = await fetch(
       `https://oengus.io/api/marathons/${eventId}/submissions`
     )
+    if (!response.ok) {
+      throw new Error(`API respond ${response.status}. ${response.statusText}`)
+    }
     const submissions = (await response.json()) as Array<Submission>
     return this._convertToResult(submissions)
   }
 
   getRunsFromFile(file: string) {
+    console.log('Loading submissions from file...')
     const submissions = require(file) as Array<Submission>
     return this._convertToResult(submissions)
   }
 
   async getResults(eventId: string, runs: Array<Run>) {
+    console.log('Fetching selections from API...')
     const url = new URL(`https://oengus.io/api/marathons/${eventId}/selections`)
     const response = await fetch(url.href)
+    if (!response.ok) {
+      throw new Error(`API respond ${response.status}. ${response.statusText}`)
+    }
     const selectionsObj = (await response.json()) as object
     const selections = Object.values(selectionsObj) as Array<Selection>
 
