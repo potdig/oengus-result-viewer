@@ -3,7 +3,7 @@ import commandLineUsage from 'command-line-usage'
 import { OengusClient } from './lib/oengus-client'
 
 async function printResultFromAPI(eventId: string) {
-  const runs = await oengus.getRuns(eventId)
+  const runs = await oengus.getRunsFromApi(eventId)
   const results = await oengus.getResults(eventId, runs)
   results.forEach(result => {
     console.log(result.formatted)

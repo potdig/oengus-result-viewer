@@ -8,7 +8,7 @@ import submissionsResponses from './data/submissions-response'
 import selectionsResponses from './data/selections-response'
 
 describe('OengusClient', () => {
-  describe('getRuns', () => {
+  describe('getRunsFromApi', () => {
     it('convert submissions', async () => {
       const eventId = 'eventid'
 
@@ -16,7 +16,7 @@ describe('OengusClient', () => {
       mockFetch.mockReturnValue(new Response(JSON.stringify(submissionsResponses[eventId])))
 
       const client = new OengusClient()
-      const runs: Array<Run> = await client.getRuns(eventId)
+      const runs: Array<Run> = await client.getRunsFromApi(eventId)
 
       expect(runs[0]).toEqual({
         _id: 1,
@@ -42,7 +42,7 @@ describe('OengusClient', () => {
       mockFetch.mockReturnValue(new Response(JSON.stringify(submissionsResponses[eventId])))
 
       const client = new OengusClient()
-      const runs: Array<Run> = await client.getRuns(eventId)
+      const runs: Array<Run> = await client.getRunsFromApi(eventId)
 
       expect(runs[0]).toEqual({
         _id: 3,
