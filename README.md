@@ -1,11 +1,17 @@
 # oengus-result-viewer
 Views selection results of marathon on Oengus.
-## Options
-| Option Name | Description |
+## Required Arguments
+| Name | Description |
 | ----------- | ----------- |
 | `--submission-file=file`, `-f` | The JSON file fetched from submission API of Oengus. **The file name is needed to be format of `[event-id].json`.** If specified with `--event-id`, this option is prefered. |
 | `--event-id=string`, `-e` | The name of the event you want to display results. This option fetches submission data from Oengus API. |
+
+## Options
+| Name | Description |
+| ----------- | ----------- |
 | `--submission-only` | Views only submissions. (result is not viewed) |
+| `--interactive`, `-i` | Uses menu interface. You can choose run and view the detail. |
+
 ## Usage Example
 ```sh
 # load submissions from JSON file (recommended)

@@ -40,12 +40,14 @@ async function printFromFile(file: string, submissionOnly: boolean = false) {
 const options = commandLineArgs([
   { name: 'submission-file', alias: 'f', type: String },
   { name: 'event-id', alias: 'e', type: String },
-  { name: 'submission-only', type: Boolean }
+  { name: 'submission-only', type: Boolean },
+  { name: 'interactive', alias: 'i', type: Boolean}
 ])
 
 const submissionFile: string = options['submission-file']
 const eventId: string = options['event-id']
 const submissionOnly: boolean = options['submission-only']
+const interactive: boolean = options['interactive']
 
 const usage = commandLineUsage([
   {
@@ -53,7 +55,7 @@ const usage = commandLineUsage([
     content: 'Views selection results of marathon on Oengus.'
   },
   {
-    header: 'Options',
+    header: 'Required Arguments',
     content: '',
     optionList: [
       {
@@ -68,10 +70,21 @@ const usage = commandLineUsage([
         alias: 'e',
         description:
           'The name of the event you want to display results. This option fetches submission data from Oengus API.'
-      },
+      }
+    ]
+  },
+  {
+    header: 'Options',
+    content: '',
+    optionList: [
       {
         name: 'submission-only',
         description: 'Views only submissions. (result is not viewed)'
+      },
+      {
+        name: 'interactive',
+        alias: 'i',
+        description: 'Uses menu interface. You can choose run and view the detail.'
       }
     ]
   }
