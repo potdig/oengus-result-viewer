@@ -6,7 +6,7 @@ const options = commandLineArgs([
   { name: 'submission-file', alias: 'f', type: String },
   { name: 'event-id', alias: 'e', type: String },
   { name: 'submission-only', type: Boolean },
-  { name: 'interactive', alias: 'i', type: Boolean}
+  { name: 'interactive', alias: 'i', type: Boolean }
 ])
 
 const submissionFile: string = options['submission-file']
@@ -60,9 +60,11 @@ if (!submissionFile && !eventId) {
   process.exit(1)
 }
 
-main({
-  submissionFile,
-  eventId,
-  submissionOnly,
-  interactive
-})
+;(async () => {
+  main({
+    submissionFile,
+    eventId,
+    submissionOnly,
+    interactive
+  })
+})()
