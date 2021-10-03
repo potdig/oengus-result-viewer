@@ -2,20 +2,17 @@ import commandLineArgs from 'command-line-args'
 import commandLineUsage from 'command-line-usage'
 import { basename, resolve } from 'path'
 import { OengusClient } from './lib/oengus-client'
+import { viewResults, viewRuns } from './lib/terminal-util'
 
 async function printFromAPI(eventId: string, submissionOnly: boolean = false) {
   const runs = await oengus.getRunsFromApi(eventId)
   if (submissionOnly) {
-    runs.forEach((run) => {
-      console.log(run.formatted)
-    })
+    viewRuns(runs)
     return
   }
 
   const results = await oengus.getResults(eventId, runs)
-  results.forEach((result) => {
-    console.log(result.formatted)
-  })
+  viewResults(results)
 }
 
 async function printFromFile(file: string, submissionOnly: boolean = false) {
@@ -23,18 +20,13 @@ async function printFromFile(file: string, submissionOnly: boolean = false) {
   const runs = oengus.getRunsFromFile(path)
 
   if (submissionOnly) {
-    runs.forEach((run) => {
-      console.log(run.formatted)
-    })
+    viewRuns(runs)
     return
   }
 
   const eventId = basename(path, path.substring(path.lastIndexOf('.')))
   const results = await oengus.getResults(eventId, runs)
-
-  results.forEach((result) => {
-    console.log(result.formatted)
-  })
+  viewResults(results)
 }
 
 const options = commandLineArgs([
