@@ -1,6 +1,6 @@
 import { basename, resolve } from 'path'
 import { OengusClient } from './lib/oengus-client'
-import { viewResults, viewRuns } from './lib/terminal-util'
+import { viewResults, viewRuns, viewRunsAsMenu } from './lib/terminal-util'
 import { Args } from './lib/types/args'
 import { Run } from './lib/types/run'
 
@@ -19,6 +19,11 @@ async function main(args: Args) {
   }
 
   if (args.submissionOnly) {
+    if (args.interactive) {
+      viewRunsAsMenu(runs)
+      return
+    }
+
     viewRuns(runs)
     return
   }
