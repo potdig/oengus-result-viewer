@@ -1,33 +1,6 @@
 import commandLineArgs from 'command-line-args'
 import commandLineUsage from 'command-line-usage'
-import { basename, resolve } from 'path'
-import { OengusClient } from './lib/oengus-client'
-import { viewResults, viewRuns } from './lib/terminal-util'
-
-async function printFromAPI(eventId: string, submissionOnly: boolean = false) {
-  const runs = await oengus.getRunsFromApi(eventId)
-  if (submissionOnly) {
-    viewRuns(runs)
-    return
-  }
-
-  const results = await oengus.getResults(eventId, runs)
-  viewResults(results)
-}
-
-async function printFromFile(file: string, submissionOnly: boolean = false) {
-  const path = resolve(__dirname, file)
-  const runs = oengus.getRunsFromFile(path)
-
-  if (submissionOnly) {
-    viewRuns(runs)
-    return
-  }
-
-  const eventId = basename(path, path.substring(path.lastIndexOf('.')))
-  const results = await oengus.getResults(eventId, runs)
-  viewResults(results)
-}
+import main from './main'
 
 const options = commandLineArgs([
   { name: 'submission-file', alias: 'f', type: String },
@@ -82,19 +55,14 @@ const usage = commandLineUsage([
   }
 ])
 
-if (submissionFile && eventId) {
+if (!submissionFile && !eventId) {
   console.log(usage)
   process.exit(1)
 }
 
-const oengus = new OengusClient()
-
-if (submissionFile) {
-  ;(async () => {
-    await printFromFile(submissionFile, submissionOnly)
-  })()
-} else if (eventId) {
-  ;(async () => {
-    await printFromAPI(eventId!, submissionOnly)
-  })()
-}
+main({
+  submissionFile,
+  eventId,
+  submissionOnly,
+  interactive
+})
