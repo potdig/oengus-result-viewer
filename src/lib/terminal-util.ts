@@ -1,6 +1,13 @@
 import { Result } from './types/result'
 import { Run } from './types/run'
 import TerminalMenu from 'simple-terminal-menu'
+import { config } from 'dotenv'
+import { resolve } from 'path'
+
+config({ path: resolve(process.cwd(), 'config.env') })
+
+const menuWidth: number = parseInt(process.env['MENU_WIDTH'] ?? '80')
+const pageSize: number = parseInt(process.env['PAGE_SIZE'] ?? '10')
 
 function viewRuns(runs: Array<Run>) {
   runs.forEach((run) => {
@@ -15,7 +22,6 @@ function viewResults(results: Array<Result>) {
 }
 
 function viewRunsAsMenu(runs: Array<Run>) {
-  const pageSize = 10
   const pages = runs.reduce(
     (acc, val, index) =>
       index % pageSize ? acc : [...acc, runs.slice(index, index + pageSize)],
@@ -29,7 +35,7 @@ function createMenu(pages: Array<Array<Run>>, index: number) {
   const page = pages[index]
 
   const menu = new TerminalMenu({
-    width: 120,
+    width: menuWidth,
     bg: 'black'
   })
   menu.writeLine(`Submissions ${index + 1} / ${pages.length}`)
