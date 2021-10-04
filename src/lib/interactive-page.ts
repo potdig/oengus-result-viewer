@@ -84,7 +84,7 @@ export class InteractivePage {
       run.runners.length > 1 ? 'RUNNERS' : 'RUNNER',
       run.runners.join('\n')
     )
-    this._writeSubSection('EST', run.category.est)
+    this._writeSubSection('EST', run.category.formattedEst)
     console.log('-------------------------')
     console.log('Enter : Leave the page')
     if (runIndex < this._runs.length - 1) {

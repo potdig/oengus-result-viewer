@@ -27,6 +27,20 @@ export class Category {
     return this._type
   }
 
+  public get formattedEst() {
+    const fields = this.est.match(/PT([0-9]+H)?([0-9]+M)?([0-9]+S)?/)?.slice(1)
+    if (!fields) {
+      return 'Unknown'
+    }
+
+    const hour = fields.find((s) => this.endsWith('H', s))?.replace('H', '')
+    const minutes = fields.find((s) => this.endsWith('M', s))?.replace('M', '')
+    const seconds = fields.find((s) => this.endsWith('S', s))?.replace('S', '')
+    return `${hour ?? '0'}:${minutes?.padStart(2, '0') ?? '00'}:${
+      seconds?.padStart(2, '0') ?? '00'
+    }`
+  }
+
   public get displayedType() {
     return {
       SINGLE: 'Single Run',
@@ -37,4 +51,7 @@ export class Category {
       RELAY_RACE: 'Relay Race'
     }[this._type]
   }
+
+  private endsWith = (str: string, target: string) =>
+    RegExp(`.+${str}`).test(target)
 }
