@@ -50,7 +50,7 @@ export class InteractivePage {
     menu.writeSeparator()
     page.runs.forEach((run, index) => {
       menu.add(run.formatted, () => {
-        this._createDetailPage(run, page.no, index)
+        this._createDetailPage(page.no, index)
       })
     })
     if (pageNumber > 0) {
@@ -66,25 +66,57 @@ export class InteractivePage {
     return menu
   }
 
-  private _createDetailPage(run: Run, pageNumber: number, listIndex: number) {
+  private _createDetailPage(pageNumber: number, listIndex: number) {
+    const runIndex = pageNumber * pageSize + listIndex
+    const run = this._runs[runIndex]
     console.clear()
-    this._writeMainSection('GAME', `${run.game.name} (${run.game.platform})`, run.game.description)
-    this._writeMainSection('CATEGORY', `${run.category.name} (${run.category.displayedType})`, run.category.description)
-    this._writeSubSection(run.runners.length > 1 ? 'RUNNERS' : 'RUNNER', run.runners.join('\n'))
+    this._writeMainSection(
+      'GAME',
+      `${run.game.name} (${run.game.platform})`,
+      run.game.description
+    )
+    this._writeMainSection(
+      'CATEGORY',
+      `${run.category.name} (${run.category.displayedType})`,
+      run.category.description
+    )
+    this._writeSubSection(
+      run.runners.length > 1 ? 'RUNNERS' : 'RUNNER',
+      run.runners.join('\n')
+    )
     this._writeSubSection('EST', run.category.est)
-    console.log('---------------------')
-    console.log('Enter: Leave the page')
-    this._waitForKey((key) => {
+    console.log('-------------------------')
+    console.log('Enter : Leave the page')
+    if (runIndex < this._runs.length - 1) {
+      console.log('Right : View next run')
+    }
+    if (runIndex > 0) {
+      console.log('Left  : View previous run')
+    }
+    this._waitForKey((key, term) => {
       if (key === 'enter') {
         this._createListPage(pageNumber, listIndex)
+        term.removeAllListeners()
+      } else if (key === 'right' && runIndex < this._runs.length - 1) {
+        this._moveTo(runIndex + 1)
+        term.removeAllListeners()
+      } else if (key === 'left' && runIndex > 0) {
+        this._moveTo(runIndex - 1)
+        term.removeAllListeners()
       }
     })
+  }
+
+  private _moveTo(index: number) {
+    const pageToMove = Math.floor(index / pageSize)
+    const indexToMove = Math.floor(index % pageSize)
+    this._createDetailPage(pageToMove, indexToMove)
   }
 
   private _writeMainSection(header: String, ...contents: Array<String>) {
     console.log(this._header1(` ${header} `))
     console.log()
-    contents.forEach(content => {
+    contents.forEach((content) => {
       console.log(content)
       console.log()
     })
@@ -99,7 +131,7 @@ export class InteractivePage {
   private _header1 = (str: string) => black.bgWhite.bold(str)
   private _header2 = (str: string) => white.underline.bold(str)
 
-  private _waitForKey(callback: (key: string) => void) {
+  private _waitForKey(callback: (key: string, term: Terminal) => void) {
     if (process.stdin.isTTY) {
       process.stdin.setRawMode(true)
     }
@@ -107,8 +139,7 @@ export class InteractivePage {
     const term = new Terminal(process.stdin, process.stdout, {})
 
     term.addListener('keypress', (keyEvent: KeyboardEvent) => {
-      callback(keyEvent.name)
-      term.removeAllListeners()
+      callback(keyEvent.name, term)
     })
   }
 }
