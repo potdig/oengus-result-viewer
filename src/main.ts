@@ -14,7 +14,7 @@ async function main(args: Args) {
     runs = await oengus.getRunsFromFile(path)
     eventId = basename(path, path.substring(path.lastIndexOf('.')))
   } else {
-    runs = oengus.getRunsFromFile(args.eventId)
+    runs = await oengus.getRunsFromApi(args.eventId)
     eventId = args.eventId
   }
 
