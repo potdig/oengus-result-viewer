@@ -3,6 +3,7 @@ import TerminalMenu from 'simple-terminal-menu'
 import { resolve } from 'path'
 import { Run } from './types/run'
 import { Page } from './types/page'
+import { black } from 'colors'
 
 config({ path: resolve(process.cwd(), 'config.env') })
 
@@ -69,10 +70,20 @@ export class InteractivePage {
       width: menuWidth,
       bg: 'black'
     })
-    menu.writeLine(`Detail for ID: ${run.id} will be here.`)
+    this._addSectionTo(menu, 'TITLE', run.game)
+    this._addSectionTo(menu, 'CATEGORY / TYPE', `${run.category} (${run.displayedType})`)
+    this._addSectionTo(menu, 'RUNNER(S)', run.runners.join(', '))
     menu.writeSeparator()
     menu.add('< BACK TO THE SUBMISSION LIST', () => {
       this._createListPage(pageNumber, listIndex)
     })
   }
+
+  private _addSectionTo(menu: TerminalMenu, header: string, content: string) {
+    menu.writeLine(this._header(` ${header} `))
+    menu.writeLine(content)
+    menu.writeLine('')
+  }
+
+  private _header = (str: string) => black.bgWhite.bold(str)
 }

@@ -1,9 +1,10 @@
 export class Run {
-  private _id: number
-  private _game: string
-  private _category: string
-  private _type: string
-  private _runners: Array<string>
+  private _id: number;
+  private _game: string;
+  private _category: string;
+  private _type: string;
+
+  private _runners: Array<string>;
 
   constructor(
     id: number,
@@ -23,11 +24,23 @@ export class Run {
     return this._id
   }
 
-  get formatted() {
-    return `${this._game} / ${this._category} (${this._displayedType}) / ${this._runners.join(', ')}`
+  get game() {
+    return this._game
   }
 
-  private get _displayedType() {
+  get category() {
+    return this._category
+  }
+
+  get runners() {
+    return this._runners
+  }
+
+  get formatted() {
+    return `${this._game} / ${this._category} (${this.displayedType}) / ${this._runners.join(', ')}`
+  }
+
+  public get displayedType() {
     return {
       SINGLE: 'Single Run',
       RACE: 'Race',
