@@ -70,8 +70,8 @@ export class InteractivePage {
       width: menuWidth,
       bg: 'black'
     })
-    this._addSectionTo(menu, 'TITLE', run.game)
-    this._addSectionTo(menu, 'CATEGORY / TYPE', `${run.category} (${run.displayedType})`)
+    this._addSectionTo(menu, 'TITLE', run.game.name)
+    this._addSectionTo(menu, 'CATEGORY / TYPE', `${run.category.name} (${run.category.displayedType})`)
     this._addSectionTo(menu, 'RUNNER(S)', run.runners.join(', '))
     menu.writeSeparator()
     menu.add('< BACK TO THE SUBMISSION LIST', () => {

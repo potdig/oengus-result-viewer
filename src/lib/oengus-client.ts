@@ -2,6 +2,8 @@ import fetch from 'node-fetch'
 import { Selection, Submission, User } from './types/response-types'
 import { Run } from './types/run'
 import { Result } from './types/result'
+import { Game } from './types/game'
+import { Category } from './types/category'
 
 export class OengusClient {
   async getRunsFromApi(eventId: string) {
@@ -32,22 +34,30 @@ export class OengusClient {
     const selectionsObj = (await response.json()) as object
     const selections = Object.values(selectionsObj) as Array<Selection>
 
-    return selections.map(selection => new Result(
-      selection.status,
-      runs.find(run => run.id === selection.categoryId)
-    ))
+    return selections.map(
+      (selection) =>
+        new Result(
+          selection.status,
+          runs.find((run) => run.id === selection.categoryId)
+        )
+    )
   }
 
   private _convertToResult = (submissions: Array<Submission>) =>
     submissions.flatMap((submission) => {
       return submission.games.flatMap((game) => {
         return game.categories.map((category) => {
-          return new Run(category.id, game.name, category.name, category.type, [
-            this._availableUserNamefor(submission.user),
-            ...category.opponentDtos
-              .map((opponent) => opponent.user)
-              .map((user) => this._availableUserNamefor(user))
-          ])
+          return new Run(
+            category.id,
+            new Game(game.name, game.console, game.description),
+            new Category(category.name, category.estimate, category.description, category.type),
+            [
+              this._availableUserNamefor(submission.user),
+              ...category.opponentDtos
+                .map((opponent) => opponent.user)
+                .map((user) => this._availableUserNamefor(user))
+            ]
+          )
         })
       })
     })

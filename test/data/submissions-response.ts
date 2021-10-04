@@ -10,10 +10,14 @@ const eventid = [
       {
         id: 1,
         name: 'Game Title 1',
+        console: 'PC',
+        description: 'desc',
         categories: [
           {
             id: 1,
             name: 'Category%',
+            estimate: 'PT20M',
+            description: 'desc',
             type: 'SINGLE',
             opponentDtos: []
           }
@@ -32,10 +36,14 @@ const eventid = [
       {
         id: 2,
         name: 'Game Title 2',
+        console: 'PC',
+        description: 'desc',
         categories: [
           {
             id: 2,
             name: 'Any%',
+            estimate: 'PT20M',
+            description: 'desc',
             type: 'RACE',
             opponentDtos: [
               {
