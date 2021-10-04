@@ -28,10 +28,10 @@ function viewRunsAsMenu(runs: Array<Run>) {
     [] as Array<Array<Run>>
   )
 
-  createMenu(pages, 0)
+  createListPage(pages, 0)
 }
 
-function createMenu(pages: Array<Array<Run>>, index: number) {
+function createListPage(pages: Array<Array<Run>>, index: number) {
   const page = pages[index]
 
   const menu = new TerminalMenu({
@@ -47,12 +47,12 @@ function createMenu(pages: Array<Array<Run>>, index: number) {
   })
   if (index > 0) {
     menu.add(' << BACK', () => {
-      createMenu(pages, index - 1)
+      createListPage(pages, index - 1)
     })
   }
   if (index < pages.length - 1) {
     menu.add(' NEXT >>', () => {
-      createMenu(pages, index + 1)
+      createListPage(pages, index + 1)
     })
   }
   return menu
