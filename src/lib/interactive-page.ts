@@ -1,9 +1,10 @@
 import { config } from 'dotenv'
 import TerminalMenu from 'simple-terminal-menu'
 import { resolve } from 'path'
+import { black, white } from 'colors'
+import Terminal, { KeyboardEvent } from 'tty-events'
 import { Run } from './types/run'
 import { Page } from './types/page'
-import { black } from 'colors'
 
 config({ path: resolve(process.cwd(), 'config.env') })
 
@@ -19,12 +20,12 @@ export class InteractivePage {
         index % pageSize
           ? acc
           : [
-            ...acc,
-            new Page(
-              this._runs.slice(index, index + pageSize),
-              Math.floor(index / pageSize)
-            )
-          ],
+              ...acc,
+              new Page(
+                this._runs.slice(index, index + pageSize),
+                Math.floor(index / pageSize)
+              )
+            ],
       [] as Array<Page>
     )
   }
@@ -66,24 +67,48 @@ export class InteractivePage {
   }
 
   private _createDetailPage(run: Run, pageNumber: number, listIndex: number) {
-    const menu = new TerminalMenu({
-      width: menuWidth,
-      bg: 'black'
-    })
-    this._addSectionTo(menu, 'TITLE', run.game.name)
-    this._addSectionTo(menu, 'CATEGORY / TYPE', `${run.category.name} (${run.category.displayedType})`)
-    this._addSectionTo(menu, 'RUNNER(S)', run.runners.join(', '))
-    menu.writeSeparator()
-    menu.add('< BACK TO THE SUBMISSION LIST', () => {
-      this._createListPage(pageNumber, listIndex)
+    console.clear()
+    this._writeMainSection('GAME', `${run.game.name} (${run.game.platform})`, run.game.description)
+    this._writeMainSection('CATEGORY', `${run.category.name} (${run.category.displayedType})`, run.category.description)
+    this._writeSubSection(run.runners.length > 1 ? 'RUNNERS' : 'RUNNER', run.runners.join('\n'))
+    this._writeSubSection('EST', run.category.est)
+    console.log('---------------------')
+    console.log('Enter: Leave the page')
+    this._waitForKey((key) => {
+      if (key === 'enter') {
+        this._createListPage(pageNumber, listIndex)
+      }
     })
   }
 
-  private _addSectionTo(menu: TerminalMenu, header: string, content: string) {
-    menu.writeLine(this._header(` ${header} `))
-    menu.writeLine(content)
-    menu.writeLine('')
+  private _writeMainSection(header: String, ...contents: Array<String>) {
+    console.log(this._header1(` ${header} `))
+    console.log()
+    contents.forEach(content => {
+      console.log(content)
+      console.log()
+    })
   }
 
-  private _header = (str: string) => black.bgWhite.bold(str)
+  private _writeSubSection(header: String, contents: string) {
+    console.log(this._header2(`${header}`))
+    console.log(contents)
+    console.log()
+  }
+
+  private _header1 = (str: string) => black.bgWhite.bold(str)
+  private _header2 = (str: string) => white.underline.bold(str)
+
+  private _waitForKey(callback: (key: string) => void) {
+    if (process.stdin.isTTY) {
+      process.stdin.setRawMode(true)
+    }
+
+    const term = new Terminal(process.stdin, process.stdout, {})
+
+    term.addListener('keypress', (keyEvent: KeyboardEvent) => {
+      callback(keyEvent.name)
+      term.removeAllListeners()
+    })
+  }
 }

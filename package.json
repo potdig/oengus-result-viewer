@@ -30,6 +30,7 @@
     "command-line-usage": "^6.1.1",
     "dotenv": "^10.0.0",
     "node-fetch": "^2.6.5",
-    "simple-terminal-menu": "^2.0.0"
+    "simple-terminal-menu": "^2.0.0",
+    "tty-events": "^0.9.3"
   }
 }
