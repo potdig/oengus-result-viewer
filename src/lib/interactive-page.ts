@@ -33,15 +33,16 @@ export class InteractivePage {
   }
 
   view() {
-    this._createListPage(0)
+    this._createListPage(0, 0)
   }
 
-  private _createListPage(pageNumber: number) {
+  private _createListPage(pageNumber: number, listIndex: number) {
     const page = this._pages[pageNumber]
 
     const menu = new TerminalMenu({
       width: menuWidth,
-      bg: 'black'
+      bg: 'black',
+      selected: listIndex
     })
     menu.writeLine(`Submissions ${pageNumber + 1} / ${this._pages.length}`)
     menu.writeSeparator()
@@ -52,12 +53,12 @@ export class InteractivePage {
     })
     if (pageNumber > 0) {
       menu.add(' << BACK', () => {
-        this._createListPage(pageNumber - 1)
+        this._createListPage(pageNumber - 1, 0)
       })
     }
     if (pageNumber < this._pages.length - 1) {
       menu.add(' NEXT >>', () => {
-        this._createListPage(pageNumber + 1)
+        this._createListPage(pageNumber + 1, 0)
       })
     }
     return menu
@@ -71,7 +72,7 @@ export class InteractivePage {
     menu.writeLine(`Detail for ID: ${run.id} will be here.`)
     menu.writeSeparator()
     menu.add('< BACK TO THE SUBMISSION LIST', () => {
-      this._createListPage(pageNumber)
+      this._createListPage(pageNumber, listIndex)
     })
   }
 }
