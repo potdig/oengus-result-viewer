@@ -1,13 +1,15 @@
 import { black, white } from 'colors'
 import { KeyWaiter } from './key-waiter'
+import { Formattable } from './types/formattable'
+import { Result } from './types/result'
 import { Run } from './types/run'
 
 export class DetailViewer {
-  private _runs: Array<Run>
+  private _data: Array<Formattable>
   private _index: number
 
-  constructor(runs: Array<Run>, index: number) {
-    this._runs = runs
+  constructor(data: Array<Formattable>, index: number) {
+    this._data = data
     this._index = index
   }
 
@@ -21,7 +23,7 @@ export class DetailViewer {
     })
 
     keyWaiter.addKey('right', () => {
-      if (this._index < this._runs.length - 1) {
+      if (this._index < this._data.length - 1) {
         this._index++
         this._printDetail()
       }
@@ -38,8 +40,12 @@ export class DetailViewer {
   }
 
   private _printDetail() {
-    const run = this._runs[this._index]
+    const datum = this._data[this._index]
+    const run = datum instanceof Result ? (datum as Result).run : (datum as Run)
     console.clear()
+    if (datum instanceof Result) {
+      this._writeMainSection('STATUS', datum.statusLabel ?? 'TODO')
+    }
     this._writeMainSection(
       'GAME',
       `${run.game.name} (${run.game.platform})`,
@@ -58,7 +64,7 @@ export class DetailViewer {
 
     console.log('------------------------------')
     console.log('Enter: Back to submission list')
-    if (this._index < this._runs.length - 1) {
+    if (this._index < this._data.length - 1) {
       console.log('Right : View next run')
     }
     if (this._index > 0) {

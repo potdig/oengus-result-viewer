@@ -19,4 +19,9 @@ function viewRunsAsMenu(runs: Array<Run>) {
   page.view()
 }
 
-export { viewRuns, viewResults, viewRunsAsMenu }
+function viewResultsAsMenu(results: Array<Result>) {
+  const page = new InteractivePage(results)
+  page.view()
+}
+
+export { viewRuns, viewResults, viewRunsAsMenu, viewResultsAsMenu }

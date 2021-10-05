@@ -38,7 +38,7 @@ export class OengusClient {
       (selection) =>
         new Result(
           selection.status,
-          runs.find((run) => run.id === selection.categoryId)
+          runs.find((run) => run.id === selection.categoryId)!
         )
     )
   }

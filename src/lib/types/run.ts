@@ -1,7 +1,8 @@
 import { Category } from './category'
+import { Formattable } from './formattable'
 import { Game } from './game'
 
-export class Run {
+export class Run implements Formattable {
   private _id: number
   private _game: Game
   private _category: Category

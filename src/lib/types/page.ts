@@ -1,11 +1,11 @@
-import { Run } from './run'
+import { Formattable } from './formattable'
 
 export class Page {
-  readonly runs: Array<Run>
+  readonly data: Array<Formattable>
   readonly no: number
 
-	constructor(runs: Array<Run>, no: number) {
-    this.runs = runs
+	constructor(data: Array<Formattable>, no: number) {
+    this.data = data
     this.no = no
 	}
 }

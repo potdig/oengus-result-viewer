@@ -4,6 +4,7 @@ import { resolve } from 'path'
 import { Run } from './types/run'
 import { Page } from './types/page'
 import { DetailViewer } from './detail-viewer'
+import { Formattable } from './types/formattable'
 
 config({ path: resolve(process.cwd(), 'config.env') })
 
@@ -11,17 +12,17 @@ const menuWidth: number = parseInt(process.env['MENU_WIDTH'] ?? '80')
 const pageSize: number = parseInt(process.env['PAGE_SIZE'] ?? '10')
 
 export class InteractivePage {
-  private readonly _runs: Array<Run>
+  private readonly _data: Array<Formattable>
 
   private get _pages() {
-    return this._runs.reduce(
+    return this._data.reduce(
       (acc, val, index) =>
         index % pageSize
           ? acc
           : [
               ...acc,
               new Page(
-                this._runs.slice(index, index + pageSize),
+                this._data.slice(index, index + pageSize),
                 Math.floor(index / pageSize)
               )
             ],
@@ -29,8 +30,8 @@ export class InteractivePage {
     )
   }
 
-  constructor(runs: Array<Run>) {
-    this._runs = runs
+  constructor(data: Array<Formattable>) {
+    this._data = data
   }
 
   view() {
@@ -47,9 +48,9 @@ export class InteractivePage {
     })
     menu.writeLine(`Submissions ${pageNumber + 1} / ${this._pages.length}`)
     menu.writeSeparator()
-    page.runs.forEach((run, index) => {
+    page.data.forEach((run, index) => {
       menu.add(run.formatted, () => {
-        const detailViewer = new DetailViewer(this._runs, pageNumber * pageSize + index)
+        const detailViewer = new DetailViewer(this._data, pageNumber * pageSize + index)
         detailViewer.launch((index) => {
           const pageNumber = Math.floor(index / pageSize)
           const listIndex = index % pageSize
